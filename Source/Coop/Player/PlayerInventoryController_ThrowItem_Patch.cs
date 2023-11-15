@@ -93,10 +93,7 @@ namespace SIT.Core.Coop.Player
                 {
                     EFT.Player.PlayerInventoryController playerInventoryController = itemController as EFT.Player.PlayerInventoryController;
                     if (playerInventoryController == null)
-                    {
                         playerInventoryController = new(player, player.Profile, false);
-                        playerInventoryController.ResetDiscardLimits();
-                    }
 
                     List<ItemsCount> destroyedItems = GetDestroyedItemsFromItem(playerInventoryController, item);
                     if (destroyedItems.Count != 0)
@@ -128,7 +125,7 @@ namespace SIT.Core.Coop.Player
             List<ItemsCount> destroyedItems = new();
 
             //if (playerInventoryController.HasDiscardLimit(item, out int itemDiscardLimit) && item.StackObjectsCount > itemDiscardLimit)
-            if (playerInventoryController.HasDiscardLimits && item.LimitedDiscard && item.DiscardLimit.HasValue)
+            if (playerInventoryController.HasDiscardLimits && item.LimitedDiscard)
             {
                 int itemDiscardLimit = item.DiscardLimit.Value;
                 if (item.StackObjectsCount > itemDiscardLimit)
@@ -149,7 +146,7 @@ namespace SIT.Core.Coop.Player
                             continue;
 
                         //if (playerInventoryController.HasDiscardLimit(itemInContainer, out int itemInContainerDiscardLimit))
-                        if (playerInventoryController.HasDiscardLimits && itemInContainer.LimitedDiscard && itemInContainer.DiscardLimit.HasValue)
+                        if (playerInventoryController.HasDiscardLimits && itemInContainer.LimitedDiscard)
                         {
                             int itemInContainerDiscardLimit = itemInContainer.DiscardLimit.Value;
 
