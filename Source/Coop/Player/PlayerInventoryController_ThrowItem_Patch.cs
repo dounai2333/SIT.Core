@@ -127,8 +127,13 @@ namespace SIT.Core.Coop.Player
         {
             List<ItemsCount> destroyedItems = new();
 
-            if (playerInventoryController.HasDiscardLimit(item, out int itemDiscardLimit) && item.StackObjectsCount > itemDiscardLimit)
-                destroyedItems.Add(new ItemsCount(item, item.StackObjectsCount - itemDiscardLimit, itemDiscardLimit));
+            //if (playerInventoryController.HasDiscardLimit(item, out int itemDiscardLimit) && item.StackObjectsCount > itemDiscardLimit)
+            if (playerInventoryController.HasDiscardLimits && item.LimitedDiscard && item.DiscardLimit.HasValue)
+            {
+                int itemDiscardLimit = item.DiscardLimit.Value;
+                if (item.StackObjectsCount > itemDiscardLimit)
+                    destroyedItems.Add(new ItemsCount(item, item.StackObjectsCount - itemDiscardLimit, itemDiscardLimit));
+            }
 
             if (item.IsContainer && destroyedItems.Count == 0)
             {
@@ -143,8 +148,11 @@ namespace SIT.Core.Coop.Player
                         if (itemInContainer == item)
                             continue;
 
-                        if (playerInventoryController.HasDiscardLimit(itemInContainer, out int itemInContainerDiscardLimit))
+                        //if (playerInventoryController.HasDiscardLimit(itemInContainer, out int itemInContainerDiscardLimit))
+                        if (playerInventoryController.HasDiscardLimits && itemInContainer.LimitedDiscard && itemInContainer.DiscardLimit.HasValue)
                         {
+                            int itemInContainerDiscardLimit = itemInContainer.DiscardLimit.Value;
+
                             if (!destroyedItems.Any(x => x.Item.TemplateId == itemInContainer.TemplateId))
                             {
                                 string templateId = itemInContainer.TemplateId;
